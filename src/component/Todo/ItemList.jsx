@@ -6,19 +6,25 @@ class ItemList extends React.Component {
     render () {
         return (
             <div>
-                {this.props.item.map((item, i) => {
+                {/* {Object.keys(this.props.item).map((item, i) => {
                     return (
-                        <Item key={i} item={item} />
+                        <div>
+                            {i}
+                        {item.item}
+                        </div>
+                        // <Item key={i} item={item} removeItem={(targetIdx) => {this.props.removeItem(targetIdx) }}/>
                     )
-                })}
+                })} */}
             </div>
         )
     }
 }
 
+
+
 let mapStateToProps = (state) => {
     return {
-        item: state.todo_list
+        todo_list: state.todo_list
     }
 }
 

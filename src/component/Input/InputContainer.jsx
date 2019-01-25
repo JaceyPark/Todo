@@ -7,7 +7,8 @@ class InputContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: ''
+      text: '',
+      idx: 0
     }
     this.addNewItem = this.addNewItem.bind(this);
   }
@@ -21,14 +22,17 @@ class InputContainer extends React.Component {
 
   addNewItem (event) {
     if (event.keyCode === 13) {
-      this.props.addNewItem(event.target.value)
+      this.setState({
+        idx: this.state.idx + 1
+      })
+      this.props.addNewItem(event.target.value, this.state.idx)
     }
   }
 }
 
 let mapDispatchToProps = (dispatch) => {
   return {
-    addNewItem: (value) => dispatch(add_new_item(value))
+    addNewItem: (value, idx) => dispatch(add_new_item(value, idx))
   }
 }
 
