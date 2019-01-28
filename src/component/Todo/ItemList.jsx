@@ -3,24 +3,27 @@ import Item from './Item';
 import { connect } from 'react-redux'
 
 class ItemList extends React.Component {
+    // constructor(props) {
+    //     super(props);
+    // }
     render () {
         return (
             <div>
-                {/* {Object.keys(this.props.item).map((item, i) => {
-                    return (
-                        <div>
-                            {i}
-                        {item.item}
-                        </div>
-                        // <Item key={i} item={item} removeItem={(targetIdx) => {this.props.removeItem(targetIdx) }}/>
-                    )
-                })} */}
+                {
+                    Object.keys(this.props.todo_list).map((key, i) => {
+                        return (
+                            <Item 
+                              key={i} 
+                              todo={this.props.todo_list[i]} 
+                              removeItem={this.props.removeItem}
+                              editItem={this.props.editItem} />
+                        )
+                    })
+                }
             </div>
         )
     }
 }
-
-
 
 let mapStateToProps = (state) => {
     return {
