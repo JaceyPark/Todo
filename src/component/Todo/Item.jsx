@@ -2,19 +2,21 @@ import React from 'react';
 
 const ItemPresenter = ({
   isModifyMode,
-  item,
+  todo,
   onChange,
-  onKeyDown,
+  onSubmit,
 }) => {
     return (
       isModifyMode === false 
-      ? <span>{item}</span> 
-      : (<input 
+      ? <span>{todo.item}</span> 
+      : (<form 
+            onSubmit={onSubmit}>
+          <input 
           type="text" 
-          value={item} 
-          onChange={onChange} 
-          onKeyDown={onKeyDown}
-        />)
+          value={todo.item} 
+          onChange={(e) => onChange(e)} 
+        />
+        </form>)
     );
 }
 class Item extends React.Component {
@@ -22,15 +24,29 @@ class Item extends React.Component {
         super(props);
         this.state = {
             isModifyMode : false,
-            item: props.todo.item
+            todo: props.todo,
         }
     }
-    onChange = (e) => {
-        this.setState({ item: e.target.value });
+    onChangeHandler = (e) => {
+        e.persist();
+        
+        this.setState(prevState => ({
+            todo: {
+                ...prevState.todo,
+                item: e.target.value,
+            }
+        }))
     }
 
-    onKeyDown = (e) => {
-       this.props.editItem(e, this.state.item);
+    onSubmitHandler = (e) => {
+        this.setCurrentModifyMode(null, () => this.props.editItem(this.state.todo));
+    }
+
+    setCurrentModifyMode = (e, cb = () => {}) => {
+        this.setState(prevState => ({
+            ...prevState,
+            isModifyMode: !prevState.isModifyMode,
+        }), cb);
     }
 
     render () {
@@ -38,19 +54,18 @@ class Item extends React.Component {
             <div>
                 <ItemPresenter 
                   isModifyMode={this.state.isModifyMode}
-                  item={this.state.item}
-                  onChange={this.onChange}
-                  onKeyDown={this.onKeyDown}
+                  todo={this.state.todo}
+                  onChange={this.onChangeHandler}
+                  onSubmit={this.onSubmitHandler}
                 />   
                 <button onClick={() => { 
-                    console.log(this.props.todo.idx)
-                    debugger
                     this.props.removeItem(this.props.todo.idx)
-                    debugger
-                  }}>삭제 {this.props.todo.idx}
+                  }}>삭제
                 </button>
 
-                <button onClick={() => { this.setState({ isModifyMode : true })}}>편집</button>  
+                <button onClick={this.setCurrentModifyMode}>
+                  {this.state.isModifyMode ? '완료' : '편집'}
+                </button>  
             </div>
         )
     }

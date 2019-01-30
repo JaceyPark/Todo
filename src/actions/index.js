@@ -17,6 +17,6 @@ export const remove_item = (idx) => {
 export const edit_item = (item) => {
   return {
     type: types.EDIT_ITEM,
-    item: item
+    payload: { item }
   }
 }

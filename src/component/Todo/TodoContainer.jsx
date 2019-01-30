@@ -1,28 +1,26 @@
 import React from 'react';
-import ItemList from './ItemList';
 import { connect } from 'react-redux'
-import { remove_item } from '../../actions/index'
+import ItemList from './ItemList';
+import { remove_item, edit_item } from '../../actions/index'
 class TodoContainer extends React.Component {
   render() {
     return(
       <div>
-        <ItemList removeItem={(targetIdx) => {this.props.removeItem(targetIdx)}} editItem={(item) => this.editItem(item)}/>
+        <ItemList 
+          removeItem={this.props.removeItem} 
+          editItem={this.props.editItem}/>
       </div>
     )
   }
-  editItem = (item) => {
-    this.props.editItem(item)
-  }
 }
 
-let mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     removeItem: (targetIdx) => {
-      debugger
       dispatch(remove_item(targetIdx))
     },
-    editItem: (item) => dispatch() 
+    editItem: (item) => dispatch(edit_item(item)) 
   }
 }
 
-export default connect(undefined, mapDispatchToProps)(TodoContainer)
+export default connect(null, mapDispatchToProps)(TodoContainer)

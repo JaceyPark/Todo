@@ -1,12 +1,14 @@
 import React from 'react';
-import Wrapper from '../component/Wrapper'
+import InputContainer from '../component/Input/InputContainer';
+import TodoContainer from '../component/Todo/TodoContainer';
 
 class Todo extends React.Component {
-    render () {
+    render() {
         return (
-            <div>
-                <Wrapper />
-            </div>
+            <>
+                <InputContainer />
+                <TodoContainer />
+            </>
         )
     }
 }
