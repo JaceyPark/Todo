@@ -1,9 +1,22 @@
 {
-  "posts": [
-    { "id": 1, "title": "json-server", "author": "typicode" }
-  ],
-  "comments": [
-    { "id": 1, "body": "some comment", "postId": 1 }
-  ],
-  "profile": { "name": "typicode" }
+  "todo_item_1": {
+    "item": "h",
+    "idx": "todo_item_1"
+  },
+  "todo_item_2": {
+    "item": "e",
+    "idx": "todo_item_2"
+  },
+  "todo_item_3": {
+    "item": "l",
+    "idx": "todo_item_3"
+  },
+  "todo_item_4": {
+    "item": "l",
+    "idx": "todo_item_4"
+  },
+  "todo_item_5": {
+    "item": "o",
+    "idx": "todo_item_5"
+  }
 }

@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
-import Todo from './scene/Todo';
+import React, {Component} from 'react'
+import {BrowserRouter} from 'react-router-dom'
+import Todo from './scene/Todo'
 class App extends Component {
   render() {
     return (
-      <div>
+      <BrowserRouter>
         <Todo />
-      </div>
-    );
+      </BrowserRouter>
+    )
   }
 }
 
-export default App;
+export default App

@@ -1,26 +1,26 @@
-import * as React from 'react';
-import { connect } from 'react-redux';
-import { uniqueId } from 'lodash'
+import * as React from 'react'
+import {connect} from 'react-redux'
 import Input from './Input'
-import { add_new_item } from '../../actions/index';
+import {add_new_item} from '../../actions/index'
+import {BASE_URL} from '../../constants/API'
 
 class Item {
   constructor(item) {
-    this.item = item;
-    this.idx = uniqueId('todo_item_');
+    this.item = item
+    this.id = +new Date()
   }
 }
 
 class InputContainer extends React.Component {
   state = {
-      text: '',
-    }
+    text: '',
+  }
 
   render() {
-    return(
+    return (
       <div>
-        <Input 
-          addNewItems={this.addNewItem} 
+        <Input
+          addNewItems={this.addNewItemHandler}
           text={this.state.text}
           onItemInputChangeHandler={this.onItemInputChangeHandler}
         />
@@ -28,32 +28,43 @@ class InputContainer extends React.Component {
     )
   }
 
-  onItemInputChangeHandler = (e) => {
-    e.persist();
-    
+  onItemInputChangeHandler = e => {
+    e.persist()
+
     this.setState(prevState => ({
       ...prevState,
-      text: e.target.value
+      text: e.target.value,
     }))
   }
 
-  addNewItem = (e) => {    
-    e.preventDefault();
+  /**
+   * 1. call stack
+   * 2. promise
+   * 3. event queue
+   */
+  addNewItemHandler = async e => {
+    e.preventDefault()
+    this.setState({text: ''})
     if (this.state.text.length === 0) {
-      return false;
+      return false
     }
-
-    this.props.addNewItem(new Item(this.state.text))
-    this.setState({
-      text : ''
+    const response = await fetch(BASE_URL, {
+      method: 'POST',
+      body: JSON.stringify(new Item(this.state.text)),
+      headers: {'Content-Type': 'application/json'},
     })
+    const result = await response.json()
+    this.props.addNewItem(result)
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    addNewItem: ({ idx, item }) => dispatch(add_new_item(item, idx))
+    addNewItem: ({id, item}) => dispatch(add_new_item(item, id)),
   }
 }
 
-export default connect(null, mapDispatchToProps)(InputContainer)
+export default connect(
+  null,
+  mapDispatchToProps,
+)(InputContainer)

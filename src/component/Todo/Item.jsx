@@ -1,74 +1,79 @@
-import React from 'react';
+import React from 'react'
+import {Link} from 'react-router-dom'
 
-const ItemPresenter = ({
-  isModifyMode,
-  todo,
-  onChange,
-  onSubmit,
-}) => {
-    return (
-      isModifyMode === false 
-      ? <span>{todo.item}</span> 
-      : (<form 
-            onSubmit={onSubmit}>
-          <input 
-          type="text" 
-          value={todo.item} 
-          onChange={(e) => onChange(e)} 
-        />
-        </form>)
-    );
+const ItemPresenter = ({isModifyMode, todo, onChange, onSubmit}) => {
+  return isModifyMode === false ? (
+    <Link
+      to={{
+        pathname: `/info/${todo.id}`,
+        state: {item: todo.item},
+      }}
+      key={todo.id}
+    >
+      {todo.item}
+    </Link>
+  ) : (
+    <form onSubmit={onSubmit}>
+      <input type="text" value={todo.item} onChange={onChange} />
+    </form>
+  )
 }
 class Item extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isModifyMode : false,
-            todo: props.todo,
-        }
+  constructor(props) {
+    super(props)
+    this.state = {
+      isModifyMode: false,
+      todo: props.todo,
     }
-    onChangeHandler = (e) => {
-        e.persist();
-        
-        this.setState(prevState => ({
-            todo: {
-                ...prevState.todo,
-                item: e.target.value,
-            }
-        }))
-    }
+  }
+  onChangeHandler = e => {
+    e.persist()
 
-    onSubmitHandler = (e) => {
-        this.setCurrentModifyMode(null, () => this.props.editItem(this.state.todo));
-    }
+    this.setState(prevState => ({
+      todo: {
+        ...prevState.todo,
+        item: e.target.value,
+      },
+    }))
+  }
 
-    setCurrentModifyMode = (e, cb = () => {}) => {
-        this.setState(prevState => ({
-            ...prevState,
-            isModifyMode: !prevState.isModifyMode,
-        }), cb);
-    }
+  onSubmitHandler = e => {
+    this.setCurrentModifyMode(null, () => this.props.editItem(this.state.todo))
+  }
 
-    render () {
-        return(
-            <div>
-                <ItemPresenter 
-                  isModifyMode={this.state.isModifyMode}
-                  todo={this.state.todo}
-                  onChange={this.onChangeHandler}
-                  onSubmit={this.onSubmitHandler}
-                />   
-                <button onClick={() => { 
-                    this.props.removeItem(this.props.todo.idx)
-                  }}>삭제
-                </button>
+  setCurrentModifyMode = (e, cb = () => {}) => {
+    this.setState(
+      prevState => ({
+        ...prevState,
+        isModifyMode: !prevState.isModifyMode,
+      }),
+      cb,
+    )
+  }
 
-                <button onClick={this.setCurrentModifyMode}>
-                  {this.state.isModifyMode ? '완료' : '편집'}
-                </button>  
-            </div>
-        )
-    }
+  render() {
+    return (
+      <div>
+        <ItemPresenter
+          isModifyMode={this.state.isModifyMode}
+          todo={this.state.todo}
+          onChange={this.onChangeHandler}
+          onSubmit={this.onSubmitHandler}
+        />
+        <button
+          onClick={() => {
+            this.props.removeItem(this.props.todo.id)
+          }}
+        >
+          삭제
+        </button>
+
+        <button onClick={this.setCurrentModifyMode}>
+          {this.state.isModifyMode ? '완료' : '편집'}
+        </button>
+      </div>
+    )
+  }
 }
 
-export default Item;
+export default Item
